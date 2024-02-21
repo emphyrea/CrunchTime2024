@@ -21,6 +21,7 @@ public:
 	
 	void ApplyInitialEffects();
 	void GrantInitialAbilities();
+	void ApplyFullStat();
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Init")
 	TArray<TSubclassOf<UGameplayEffect>> InitialEffects;

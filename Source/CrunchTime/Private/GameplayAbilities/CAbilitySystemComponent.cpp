@@ -28,3 +28,11 @@ void UCAbilitySystemComponent::GrantInitialAbilities()
 		GiveAbility(FGameplayAbilitySpec{AbilityPair.Value, 1, (int)AbilityPair.Key, GetOwner()});
 	}
 }
+
+void UCAbilitySystemComponent::ApplyFullStat()
+{
+	if (FullStatEffect)
+	{
+
+	}
+}
