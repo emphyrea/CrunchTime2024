@@ -10,5 +10,10 @@ FGameplayTag UCAbilityGenericTags::GetGenericTargetAquiredTag()
 
 FGameplayTag UCAbilityGenericTags::GetFullHealthTag()
 {
+	return FGameplayTag::RequestGameplayTag("stat.fullHealth");
+}
 
+FGameplayTag UCAbilityGenericTags::GetDeadTag()
+{
+	return FGameplayTag::RequestGameplayTag("stat.dead");
 }
