@@ -106,6 +106,10 @@ void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	if(StatusGuage)
 		StatusGuage->SetHealth(ChangeData.NewValue, AttributeSet->GetMaxHealth());
+	if (HasAuthority())
+	{
+
+	}
 }
 
 void ACCharacterBase::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)

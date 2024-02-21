@@ -7,3 +7,8 @@ FGameplayTag UCAbilityGenericTags::GetGenericTargetAquiredTag()
 {
 	return FGameplayTag::RequestGameplayTag("targeting.aquired");
 }
+
+FGameplayTag UCAbilityGenericTags::GetFullHealthTag()
+{
+
+}
