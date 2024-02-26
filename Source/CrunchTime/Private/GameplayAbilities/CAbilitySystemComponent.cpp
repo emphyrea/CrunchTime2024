@@ -31,8 +31,6 @@ void UCAbilitySystemComponent::GrantInitialAbilities()
 
 void UCAbilitySystemComponent::ApplyFullStat()
 {
-	if (FullStatEffect)
-	{
-
-	}
+	if(FullStatEffect)
+		ApplyGameplayEffect(FullStatEffect);
 }

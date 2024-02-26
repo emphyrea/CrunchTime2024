@@ -14,7 +14,6 @@
 #include "Components/WidgetComponent.h"
 
 #include "Targeting/TargetingBoxComponent.h"
-
 #include "Widgets/StatusGuage.h"
 
 // Sets default values
@@ -164,7 +163,7 @@ void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewSt
 	{
 		StopAnimMontage(DeathMontage);
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-		AbilitySystemComponent.ApplyFullStat();
+		AbilitySystemComponent->ApplyFullStat();
 	}
 }
 
