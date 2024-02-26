@@ -31,7 +31,10 @@ void UTargetingBoxComponent::DoTargetCheck()
 		for (const FOverlapResult& result : OutResult)
 		{
 			AActor* OverlappedActor = result.GetActor();
-			TargetFound(OverlappedActor);
+			if (result.GetComponent() == OverlappedActor->GetRootComponent())
+			{
+				TargetFound(OverlappedActor);
+			}
 		}
 	}
 

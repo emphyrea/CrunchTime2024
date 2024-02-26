@@ -16,6 +16,8 @@
 #include "Targeting/TargetingBoxComponent.h"
 #include "Widgets/StatusGuage.h"
 
+#include "Net/UnrealNetwork.h"
+
 // Sets default values
 ACCharacterBase::ACCharacterBase()
 {
@@ -69,6 +71,23 @@ void ACCharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ACCharacterBase::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (NewController &&!NewController->IsPlayerController())
+	{
+		SetupAbilitySystemComponent();
+		InitAttributes();
+		InitAbilities();
+	}
+	if (HasAuthority() && Controller && Controller->IsPlayerController())
+	{
+		APlayerController* OwningPlayerController = Cast<APlayerController>(Controller);
+		//TODO figure out id
+		TeamId = FGenericTeamId(1);
+	}
 }
 
 // Called to bind functionality to input
@@ -155,6 +174,7 @@ void ACCharacterBase::StartDeath()
 	PlayMontage(DeathMontage);
 	AbilitySystemComponent->ApplyGameplayEffect(DeathEffect);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewStackCount)
@@ -164,6 +184,15 @@ void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewSt
 		StopAnimMontage(DeathMontage);
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		AbilitySystemComponent->ApplyFullStat();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
 	}
+}
+
+void ACCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME_CONDITION(ACCharacterBase, TeamId, COND_None);
 }
 

@@ -17,3 +17,8 @@ FGameplayTag UCAbilityGenericTags::GetDeadTag()
 {
 	return FGameplayTag::RequestGameplayTag("stat.dead");
 }
+
+FGameplayTag UCAbilityGenericTags::GetBasicAttackActivationTag()
+{
+	return FGameplayTag::RequestGameplayTag("ability.attack.activate");
+}

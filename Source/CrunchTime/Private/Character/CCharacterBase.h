@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "GameplayEffectTypes.h"
 #include "GameplayAbilities/CGameplayCueInterface.h"
+#include "GenericTeamAgentInterface.h"
 
 #include "CCharacterBase.generated.h"
 
@@ -16,7 +17,7 @@ class UCAttributeSet;
 class UGameplayEffect;
 
 UCLASS()
-class ACCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICGameplayCueInterface
+class ACCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICGameplayCueInterface, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -26,6 +27,7 @@ public:
 	void SetupAbilitySystemComponent();
 	void InitAttributes();
 	void InitAbilities();
+	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; };
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -33,6 +35,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	//called on server only, when possessed by a controller
+	virtual void PossessedBy(AController* NewController)override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -85,4 +90,15 @@ private:
 	UAnimMontage* DeathMontage;
 	UPROPERTY(EditDefaultsOnly, Category = "Death")
 	TSubclassOf<UGameplayEffect> DeathEffect;
+
+	/*************************************************************/
+/*                                      AI                                     */
+/*************************************************************/
+
+	UPROPERTY(Replicated)
+	FGenericTeamId TeamId;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+
 };
