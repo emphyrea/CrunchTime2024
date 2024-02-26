@@ -19,5 +19,5 @@ public:
 	static FGameplayTag GetGenericTargetAquiredTag();
 	static FGameplayTag GetFullHealthTag();
 	static FGameplayTag GetDeadTag();
-	static FGameplayTag GetBasicAttackActivationTag();
+	static FGameplayTag GetBasicAttackAcitvationTag();
 };

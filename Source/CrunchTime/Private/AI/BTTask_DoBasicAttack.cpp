@@ -8,12 +8,11 @@
 
 EBTNodeResult::Type UBTTask_DoBasicAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-
 	if (AAIController* AIC = OwnerComp.GetAIOwner())
 	{
 		if (APawn* OwningPawn = AIC->GetPawn())
 		{
-			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwningPawn, UCAbilityGenericTags::GetBasicAttackActivationTag(), FGameplayEventData());
+			UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(OwningPawn, UCAbilityGenericTags::GetBasicAttackAcitvationTag(), FGameplayEventData());
 		}
 	}
 

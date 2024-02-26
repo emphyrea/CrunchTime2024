@@ -13,10 +13,11 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/WidgetComponent.h"
 
+#include "Net/UnrealNetwork.h"
+
 #include "Targeting/TargetingBoxComponent.h"
 #include "Widgets/StatusGuage.h"
 
-#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ACCharacterBase::ACCharacterBase()
@@ -76,16 +77,17 @@ void ACCharacterBase::Tick(float DeltaTime)
 void ACCharacterBase::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	if (NewController &&!NewController->IsPlayerController())
+	if (NewController && !NewController->IsPlayerController())
 	{
 		SetupAbilitySystemComponent();
 		InitAttributes();
 		InitAbilities();
 	}
+
 	if (HasAuthority() && Controller && Controller->IsPlayerController())
 	{
 		APlayerController* OwningPlayerController = Cast<APlayerController>(Controller);
-		//TODO figure out id
+		//TODO: Figure out the ID
 		TeamId = FGenericTeamId(1);
 	}
 }
@@ -185,14 +187,12 @@ void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewSt
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 		AbilitySystemComponent->ApplyFullStat();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-
 	}
 }
 
 void ACCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
 	DOREPLIFETIME_CONDITION(ACCharacterBase, TeamId, COND_None);
 }
 

@@ -2,18 +2,22 @@
 
 
 #include "AI/CAIController.h"
+
+#include "BehaviorTree/BlackboardComponent.h"
+
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
-#include "BehaviorTree/BlackboardComponent.h"
+
 
 ACAIController::ACAIController()
 {
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("AI Perception Component");
 
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight Config");
-	SightConfig->PeripheralVisionAngleDegrees = 60.0f;
-	SightConfig->SightRadius = 500.0f;
-	SightConfig->LoseSightRadius = 600.0f;
+
+	SightConfig->PeripheralVisionAngleDegrees = 60.f;
+	SightConfig->SightRadius = 500.f;
+	SightConfig->LoseSightRadius = 600.f;
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
@@ -30,19 +34,17 @@ FGenericTeamId ACAIController::GetGenericTeamId() const
 void ACAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	if (BehaviorTree)
-	{
+	if(BehaviorTree)
 		RunBehaviorTree(BehaviorTree);
-	}
+
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ACAIController::TargetPerceptionUpdated);
 }
 
 void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulus)
 {
 	if (!GetBlackboardComponent())
-	{
 		return;
-	}
+
 	if (Stimulus.WasSuccessfullySensed())
 	{
 		GetBlackboardComponent()->SetValueAsObject(TargetBBKeyName, Target);

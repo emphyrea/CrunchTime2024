@@ -12,16 +12,16 @@
 #include "AbilitySystemBlueprintLibrary.h"
 
 #include "Components/SkeletalMeshComponent.h"
-
+#include "GameplayAbilities/CAbilityGenericTags.h"
 #include "GameplayTagsManager.h"
 
 UGA_MeleeCombo::UGA_MeleeCombo()
 {
 	AbilityTags.AddTag(FGameplayTag::RequestGameplayTag("ability.combo.ability"));
 	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("ability.combo.ability"));
-
+	
 	FAbilityTriggerData TriggerData;
-	TriggerData.TriggerTag = UCAbilityGenericTags::GetBasicAttackActivationTag();
+	TriggerData.TriggerTag = UCAbilityGenericTags::GetBasicAttackAcitvationTag();
 	TriggerData.TriggerSource = EGameplayAbilityTriggerSource::GameplayEvent;
 	AbilityTriggers.Add(TriggerData);
 }
@@ -62,8 +62,9 @@ void UGA_MeleeCombo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, co
 
 	SetupWaitInputTask();
 
-	UAbilityTask_WaitGameplayEvent* WaitForActivation = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, UCAbilityGenericTags::GetBasicAttackActivationTag());
-	WaitForActivation->EventReceived.AddDynamic(this, &UGA_MeleeCombo)
+	UAbilityTask_WaitGameplayEvent* WaitForActivation = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, UCAbilityGenericTags::GetBasicAttackAcitvationTag());
+	WaitForActivation->EventReceived.AddDynamic(this, &UGA_MeleeCombo::TryCommitCombo);
+	WaitForActivation->ReadyForActivation();
 }
 
 void UGA_MeleeCombo::HandleComboEvent(FGameplayEventData Payload)
@@ -112,12 +113,6 @@ void UGA_MeleeCombo::TryCommitCombo(FGameplayEventData Payload)
 	bComboCommitted = true;
 }
 
-void UGA_MeleeCombo::AbilityInputPressed(float TimeWaited)
-{
-	SetupWaitInputTask();
-	TryCommitCombo(FGameplayEventData());
-}
-
 const TSubclassOf<UGameplayEffect> UGA_MeleeCombo::GetDamageEffectForCurrentCombo() const
 {
 	const USkeletalMeshComponent* OwnerMesh = GetOwningComponentFromActorInfo();
@@ -138,6 +133,11 @@ const TSubclassOf<UGameplayEffect> UGA_MeleeCombo::GetDamageEffectForCurrentComb
 	return TSubclassOf<UGameplayEffect>();
 }
 
+void UGA_MeleeCombo::AbilityInputPressed(float TimeWaited)
+{
+	SetupWaitInputTask();
+	TryCommitCombo(FGameplayEventData());
+}
 
 void UGA_MeleeCombo::SetupWaitInputTask()
 {
