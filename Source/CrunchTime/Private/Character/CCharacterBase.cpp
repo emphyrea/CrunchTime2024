@@ -15,11 +15,11 @@
 
 #include "Net/UnrealNetwork.h"
 
-#include "Targeting/TargetingBoxComponent.h"
-#include "Widgets/StatusGuage.h"
-
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
+
+#include "Targeting/TargetingBoxComponent.h"
+#include "Widgets/StatusGuage.h"
 
 
 // Sets default values
@@ -195,7 +195,6 @@ void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewSt
 		AbilitySystemComponent->ApplyFullStat();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		AIPerceptionSourceComp->RegisterWithPerceptionSystem();
-
 	}
 }
 
