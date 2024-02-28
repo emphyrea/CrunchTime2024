@@ -17,9 +17,12 @@
 
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
+#include "Perception/AISense_Touch.h"
 
 #include "Targeting/TargetingBoxComponent.h"
 #include "Widgets/StatusGuage.h"
+
+#
 
 
 // Sets default values
@@ -43,6 +46,8 @@ ACCharacterBase::ACCharacterBase()
 
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,  ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ACCharacterBase::HitDetected);
+
 
 	TargetingBoxComponent = CreateDefaultSubobject<UTargetingBoxComponent>("Targeting Box Component");
 	TargetingBoxComponent->SetupAttachment(GetMesh());
@@ -71,6 +76,7 @@ void ACCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 	InitStatusHUD();
+
 }
 
 // Called every frame
@@ -184,6 +190,7 @@ void ACCharacterBase::StartDeath()
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AIPerceptionSourceComp->UnregisterFromPerceptionSystem();
+	OnDeadStatusChanged.Broadcast(true);
 }
 
 void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewStackCount)
@@ -195,6 +202,8 @@ void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewSt
 		AbilitySystemComponent->ApplyFullStat();
 		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 		AIPerceptionSourceComp->RegisterWithPerceptionSystem();
+		OnDeadStatusChanged.Broadcast(false);
+
 	}
 }
 
@@ -203,4 +212,10 @@ void ACCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME_CONDITION(ACCharacterBase, TeamId, COND_None);
 }
+
+void ACCharacterBase::HitDetected(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UAISense_Touch::ReportTouchEvent(this, OtherActor, this, GetActorLocation());
+}
+
 

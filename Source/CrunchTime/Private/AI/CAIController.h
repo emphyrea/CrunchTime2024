@@ -27,6 +27,9 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "AI")
 	class UAISenseConfig_Damage* DamageConfig;
 
+	UPROPERTY(VisibleDefaultsOnly, Category = "AI")
+	class UAISenseConfig_Touch* TouchConfig;
+
 	UPROPERTY(EditDefaultsOnly, Category  = "AI")
 	class UBehaviorTree* BehaviorTree;
 	
@@ -35,4 +38,8 @@ private:
 
 	UFUNCTION()
 	void TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulus);
+	UFUNCTION()
+	void TargetForgotten(AActor* Target);
+	UFUNCTION()
+	void PawnDeathStatusChanged(bool bIsDead);
 };

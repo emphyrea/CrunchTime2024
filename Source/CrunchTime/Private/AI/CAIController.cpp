@@ -3,11 +3,21 @@
 
 #include "AI/CAIController.h"
 
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BrainComponent.h"
+
+#include "Character/CCharacterBase.h"
+
+#include "GameplayAbilities/CAbilityGenericTags.h"
 
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Damage.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Touch.h"
 
 
 ACAIController::ACAIController()
@@ -19,15 +29,21 @@ ACAIController::ACAIController()
 	SightConfig->PeripheralVisionAngleDegrees = 60.f;
 	SightConfig->SightRadius = 500.f;
 	SightConfig->LoseSightRadius = 600.f;
+	SightConfig->SetMaxAge(5.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
 
 	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>("Damage Config");
+	DamageConfig->SetMaxAge(5.0f);
+
+	TouchConfig = CreateDefaultSubobject<UAISenseConfig_Touch>("Touch Config");
+	TouchConfig->SetMaxAge(5.0f);
 	
 	AIPerceptionComponent->ConfigureSense(*SightConfig);
 	AIPerceptionComponent->ConfigureSense(*DamageConfig);
+	AIPerceptionComponent->ConfigureSense(*TouchConfig);
 }
 
 FGenericTeamId ACAIController::GetGenericTeamId() const
@@ -42,6 +58,14 @@ void ACAIController::BeginPlay()
 		RunBehaviorTree(BehaviorTree);
 
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ACAIController::TargetPerceptionUpdated);
+	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ACAIController::TargetForgotten);
+
+	ACCharacterBase* PawnAsCharacter = Cast<ACCharacterBase>(GetPawn());
+	if (PawnAsCharacter)
+	{
+		PawnAsCharacter->OnDeadStatusChanged.AddUObject(this, &ACAIController::PawnDeathStatusChanged);
+	}
+
 }
 
 void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulus)
@@ -51,10 +75,61 @@ void ACAIController::TargetPerceptionUpdated(AActor* Target, FAIStimulus Stimulu
 
 	if (Stimulus.WasSuccessfullySensed())
 	{
-		GetBlackboardComponent()->SetValueAsObject(TargetBBKeyName, Target);
+		
+		if (!GetBlackboardComponent()->GetValueAsObject(TargetBBKeyName))
+		{
+			GetBlackboardComponent()->SetValueAsObject(TargetBBKeyName, Target);	
+		}
 	}
 	else
 	{
-		GetBlackboardComponent()->ClearValue(TargetBBKeyName);
+		if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Target))
+		{
+			if (TargetASC->HasMatchingGameplayTag(UCAbilityGenericTags::GetDeadTag()))
+			{
+				auto iterator = PerceptionComponent->GetPerceptualDataIterator();
+				while (iterator)
+				{
+					if (iterator->Value.Target == Target)
+					{
+						for (FAIStimulus& stimuli : iterator->Value.LastSensedStimuli) //& reference to actually change it
+						{
+							stimuli.SetStimulusAge(TNumericLimits<float>::Max()); //set age to max
+						}
+					}
+					++iterator;
+				}
+			}
+		}
+	}
+}
+
+void ACAIController::TargetForgotten(AActor* Target)
+{
+	AActor* CurrentTarget = Cast<AActor>(GetBlackboardComponent()->GetValueAsObject(TargetBBKeyName));
+	if (CurrentTarget == Target)
+	{
+		TArray<AActor*> OtherTargets;
+		GetPerceptionComponent()->GetPerceivedHostileActors(OtherTargets);
+		if (OtherTargets.Num() != 0)
+		{
+			GetBlackboardComponent()->SetValueAsObject(TargetBBKeyName, OtherTargets[0]);
+		}
+		else
+		{
+			GetBlackboardComponent()->ClearValue(TargetBBKeyName);
+		}
+	}
+}
+
+void ACAIController::PawnDeathStatusChanged(bool bIsDead)
+{
+	if (bIsDead)
+	{
+		GetBrainComponent()->StopLogic("Dead");
+	}
+	else
+	{
+		GetBrainComponent()->StartLogic();
 	}
 }
