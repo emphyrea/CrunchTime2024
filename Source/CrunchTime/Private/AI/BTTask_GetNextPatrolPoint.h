@@ -13,7 +13,6 @@ UCLASS()
 class UBTTask_GetNextPatrolPoint : public UBTTask_BlackboardBase
 {
 	GENERATED_BODY()
-	
-	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
+	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

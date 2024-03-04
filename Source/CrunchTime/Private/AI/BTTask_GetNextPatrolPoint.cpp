@@ -2,24 +2,30 @@
 
 
 #include "AI/BTTask_GetNextPatrolPoint.h"
-#include "AIController.h"
 #include "AI/PatrollingComponent.h"
+#include "AIController.h"
+
+#include "BehaviorTree/BlackboardComponent.h"
+
+#include "Engine/TargetPoint.h"
+
 #include "GameFramework/Character.h"
-#include "Engine/TargetPoint.h""
 
 EBTNodeResult::Type UBTTask_GetNextPatrolPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	AAIController* AIC = OwnerComp.GetAIOwner();
 	ACharacter* Pawn = AIC->GetCharacter();
-	UPatrollingComponent* PatrollingComp = Pawn->GetComponentByClass<UPatrollingComponent>();
-	if (PatrollingComp)
+	
+	UPatrollingComponent* PatrolingComp = Pawn->GetComponentByClass<UPatrollingComponent>();
+	if (PatrolingComp)
 	{
-		const ATargetPoint* NextPatrolPoint = PatrollingComp->GetNextPatrolPoint();
+		const ATargetPoint* NextPatrolPoint = PatrolingComp->GetNextPatrolPoint();
 		if (NextPatrolPoint)
 		{
-			OwnerComp.GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, NextPatrolPoint->GetActorComponent());
+			OwnerComp.GetBlackboardComponent()->SetValueAsVector(BlackboardKey.SelectedKeyName, NextPatrolPoint->GetActorLocation());
 			return EBTNodeResult::Succeeded;
 		}
 	}
+
 	return EBTNodeResult::Failed;
 }
