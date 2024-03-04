@@ -17,17 +17,12 @@ class UCAbilitySystemComponent;
 class UCAttributeSet;
 class UGameplayEffect;
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnDeadStatusChanged, bool /*isDead*/);
-
-
-
 UCLASS()
 class ACCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICGameplayCueInterface, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
 public:
-	FOnDeadStatusChanged OnDeadStatusChanged;
 	// Sets default values for this character's properties
 	ACCharacterBase();
 	void SetupAbilitySystemComponent();
@@ -101,7 +96,6 @@ private:
 	/*                                          AI                                           */
 	/*************************************************************/
 private:
-
 	UPROPERTY(Replicated)
 	FGenericTeamId TeamId;
 
@@ -110,8 +104,6 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "AI")
 	class UAIPerceptionStimuliSourceComponent* AIPerceptionSourceComp;
 
-
 	UFUNCTION()
 	void HitDetected(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
 };
