@@ -202,7 +202,7 @@ void ACCharacterBase::DeathTagChanged(const FGameplayTag TagChanged, int32 NewSt
 	}
 }
 
-void ACCharacterBase::ClientStopAnimMontage(UAnimMontage* MontageToStop)
+void ACCharacterBase::ClientStopAnimMontage_Implementation(UAnimMontage* MontageToStop)
 {
 	if (!HasAuthority())
 	{
@@ -210,7 +210,7 @@ void ACCharacterBase::ClientStopAnimMontage(UAnimMontage* MontageToStop)
 	}
 }
 
-void ACCharacterBase::ClientPlayAnimMontage(UAnimMontage* MontageToPlay)
+void ACCharacterBase::ClientPlayAnimMontage_Implementation(UAnimMontage* MontageToPlay)
 {
 	if (!HasAuthority())
 	{
