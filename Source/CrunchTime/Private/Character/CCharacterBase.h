@@ -55,9 +55,14 @@ private:
 	/*                              Gameplay Ability                                  */
 	/*************************************************************/
 public:
+	bool IsAiming() const { return bIsAiming; };
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	void InitStatusHUD();
 private:
+	void AimingTagChanged(const FGameplayTag TagChanged, int32 NewStackCount);
+	virtual void AimingTagChanged(bool bNewIsAiming) {/*empty is base*/ };
+	bool bIsAiming;
+
 	UPROPERTY(VisibleAnywhere, Category = "Gameplay Ability")
 	UCAbilitySystemComponent* AbilitySystemComponent;
 
