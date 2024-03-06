@@ -68,10 +68,10 @@ void ACAIController::BeginPlay()
 
 void ACAIController::GetActorEyesViewPoint(FVector& OutLocation, FRotator& OutRotation) const
 {
-	if(GetCharacter() && GetCharacter()->GetMesh())
-	{ 
+	if (GetCharacter() && GetCharacter()->GetMesh())
+	{
 		OutLocation = GetCharacter()->GetMesh()->GetSocketLocation(AIVisionAttachSocketName);
-		OutRotation = GetCharacter()->GetMesh()->GetSocketRotation(AIVisionAttachSocketName);	
+		OutRotation = GetCharacter()->GetMesh()->GetSocketRotation(AIVisionAttachSocketName);
 		OutRotation.Pitch = 0;
 	}
 	else
