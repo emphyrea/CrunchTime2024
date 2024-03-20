@@ -10,7 +10,8 @@ void UCAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, flo
 	{
 		Health = FMath::Clamp(NewValue, 0, GetMaxHealth());
 	}
-	if (Attribute == GetHealthAttribute())
+
+	if (Attribute == GetManaAttribute())
 	{
 		Mana = FMath::Clamp(NewValue, 0, GetMaxMana());
 	}
@@ -25,7 +26,7 @@ void UCAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackD
 		SetHealth(FMath::Clamp(GetHealth(), 0, GetMaxHealth()));
 	}
 
-	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
 		SetMana(FMath::Clamp(GetMana(), 0, GetMaxMana()));
 	}
@@ -51,13 +52,14 @@ void UCAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldValue)
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UCAttributeSet, MaxMana, OldValue);
 }
 
-
 void UCAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UCAttributeSet, Health, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
+	
 	DOREPLIFETIME_CONDITION_NOTIFY(UCAttributeSet, Mana, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UCAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
+
 }

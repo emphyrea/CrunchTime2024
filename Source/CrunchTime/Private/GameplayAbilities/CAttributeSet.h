@@ -25,8 +25,9 @@ class UCAttributeSet : public UAttributeSet
 public:
 	ATTRIBUTE_ACCESSORS(UCAttributeSet, Health)
 	ATTRIBUTE_ACCESSORS(UCAttributeSet, MaxHealth)
-		ATTRIBUTE_ACCESSORS(UCAttributeSet, Mana)
-		ATTRIBUTE_ACCESSORS(UCAttributeSet, MaxMana)
+	ATTRIBUTE_ACCESSORS(UCAttributeSet, Mana)
+	ATTRIBUTE_ACCESSORS(UCAttributeSet, MaxMana)
+	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 private:

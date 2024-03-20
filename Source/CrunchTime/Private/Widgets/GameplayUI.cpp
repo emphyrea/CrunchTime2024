@@ -42,8 +42,8 @@ void UGameplayUI::ManaUpdated(const FOnAttributeChangeData& ChangeData)
 void UGameplayUI::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	StatusGuage->SetMana(GetAttributeValue(UCAttributeSet::GetManaAttribute()), ChangeData.NewValue);
-}
 
+}
 
 float UGameplayUI::GetAttributeValue(const FGameplayAttribute& Attribute) const
 {

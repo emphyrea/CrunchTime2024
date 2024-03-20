@@ -178,14 +178,6 @@ void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 	}
 }
 
-void ACCharacterBase::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)
-{
-	if(StatusGuage)
-		StatusGuage->SetHealth(AttributeSet->GetHealth(), ChangeData.NewValue);
-}
-
-
-
 void ACCharacterBase::ManaUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	if (StatusGuage)
@@ -203,13 +195,17 @@ void ACCharacterBase::ManaUpdated(const FOnAttributeChangeData& ChangeData)
 		}
 	}
 }
+void ACCharacterBase::MaxHealthUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if (StatusGuage)
+		StatusGuage->SetHealth(AttributeSet->GetHealth(), ChangeData.NewValue);
+}
 
 void ACCharacterBase::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	if (StatusGuage)
 		StatusGuage->SetMana(AttributeSet->GetMana(), ChangeData.NewValue);
 }
-
 
 void ACCharacterBase::PlayHitReaction()
 {
