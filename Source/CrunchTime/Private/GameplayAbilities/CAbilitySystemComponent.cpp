@@ -28,10 +28,10 @@ void UCAbilitySystemComponent::GrantInitialAbilities()
 		GiveAbility(FGameplayAbilitySpec{AbilityPair.Value, 1, (int)AbilityPair.Key, GetOwner()});
 
 	}
+
 	for (const TPair<EAbilityInputID, TSubclassOf<UGA_AbilityBase>>& AbilityPair : Abilities)
 	{
 		GiveAbility(FGameplayAbilitySpec{ AbilityPair.Value, 1, (int)AbilityPair.Key, GetOwner() });
-
 	}
 }
 

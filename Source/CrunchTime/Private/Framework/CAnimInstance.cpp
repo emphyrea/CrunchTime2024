@@ -2,10 +2,12 @@
 
 
 #include "Framework/CAnimInstance.h"
-#include "GameFramework/Character.h"
-#include "GameFramework/CharacterMovementComponent.h"
+
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameplayAbilities/CAbilityGenericTags.h"
 
 bool UCAnimInstance::ShouldDoUpperBody() const
@@ -21,7 +23,7 @@ void UCAnimInstance::NativeInitializeAnimation()
 	{
 		OwnerMovemmentComp = OwnerCharacter->GetCharacterMovement();
 		PrevRot = OwnerCharacter->GetActorRotation();
-		UAbilitySystemComponent* OwnerASC= UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TryGetPawnOwner());
+		UAbilitySystemComponent* OwnerASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TryGetPawnOwner());
 		if (OwnerASC)
 		{
 			OwnerASC->RegisterGameplayTagEvent(UCAbilityGenericTags::GetAimingTag()).AddUObject(this, &UCAnimInstance::AimingTagChanged);
@@ -33,6 +35,8 @@ void UCAnimInstance::NativeInitializeAnimation()
 		Montage_Play(StartMontage);
 
 	}
+
+
 }
 
 void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
@@ -58,12 +62,8 @@ void UCAnimInstance::NativeThreadSafeUpdateAnimation(float DeltaSeconds)
 		FVector LookDir = lookRot.Vector();
 		LookDir.Z = 0;
 		LookDir.Normalize();
-
 		FwdSpeed = Velocity.Dot(LookDir);
-		
 		RightSpeed = -Velocity.Dot(LookDir.Cross(FVector::UpVector));
-
-
 	}
 }
 
