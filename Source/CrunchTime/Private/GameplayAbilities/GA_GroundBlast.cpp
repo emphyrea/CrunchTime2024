@@ -77,6 +77,7 @@ void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data
 		SignalDamageStimuliEvent(Data);
 	}
 
+	GetOwningComponentFromActorInfo()->GetAnimInstance()->Montage_Play(CastingMontage);
 
 	K2_EndAbility();
 }
