@@ -4,6 +4,7 @@
 #include "GameplayAbilities/GA_AbilityBase.h"
 #include "GameplayAbilities/CAbilityGenericTags.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Perception/AISense_Damage.h"
 
 UGA_AbilityBase::UGA_AbilityBase()
@@ -20,4 +21,14 @@ void UGA_AbilityBase::SignalDamageStimuliEvent(FGameplayAbilityTargetDataHandle 
 	{
 		UAISense_Damage::ReportDamageEvent(this, Target, GetOwningActorFromActorInfo(), 1, Target->GetActorLocation(), Target->GetActorLocation());
 	}
+}
+
+void UGA_AbilityBase::ExecuteSpawnVFXCue(UParticleSystem* VFXToSpawn, float Size, const FVector& Location)
+{
+	FGameplayCueParameters Params;
+	Params.Location = Location;
+	Params.RawMagnitude = Size;
+	Params.SourceObject = VFXToSpawn;
+
+	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(UCAbilityGenericTags::GetSpawnVFXCueTag(), Params);
 }
