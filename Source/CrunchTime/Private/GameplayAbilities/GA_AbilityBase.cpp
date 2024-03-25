@@ -5,6 +5,7 @@
 #include "GameplayAbilities/CAbilityGenericTags.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "Particles/ParticleSystem.h"
 #include "Perception/AISense_Damage.h"
 
 UGA_AbilityBase::UGA_AbilityBase()
