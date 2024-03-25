@@ -77,7 +77,12 @@ void UGA_GroundBlast::TargetAquired(const FGameplayAbilityTargetDataHandle& Data
 		SignalDamageStimuliEvent(Data);
 	}
 
-	ExecuteSpawnVFXCue(BlastVFX, BlastVFXSize, );
+	const FHitResult* BlastLocationHitResult = Data.Get(1)->GetHitResult();
+	if (BlastLocationHitResult)
+	{
+		ExecuteSpawnVFXCue(BlastVFX, BlastVFXSize, BlastLocationHitResult->ImpactPoint);
+	}
+
 	GetOwningComponentFromActorInfo()->GetAnimInstance()->Montage_Play(CastingMontage);
 
 	K2_EndAbility();

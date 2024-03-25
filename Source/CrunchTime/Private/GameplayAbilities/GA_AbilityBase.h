@@ -18,6 +18,5 @@ public:
 
 protected:
 	void SignalDamageStimuliEvent(FGameplayAbilityTargetDataHandle TargetHandle);
-
 	void ExecuteSpawnVFXCue(UParticleSystem* VFXToSpawn, float Size, const FVector& Location);
 };
