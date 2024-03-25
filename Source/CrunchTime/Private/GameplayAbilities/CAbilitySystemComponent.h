@@ -7,6 +7,8 @@
 #include "GameplayAbilities/CAbilitySystemTypes.h"
 #include "CAbilitySystemComponent.generated.h"
 
+struct FGameplayAbilitySpec;
+
 /**
  * 
  */
@@ -22,6 +24,8 @@ public:
 	void ApplyInitialEffects();
 	void GrantInitialAbilities();
 	void ApplyFullStat();
+
+	TArray<const FGameplayAbilitySpec*> GetGrantedNoneGenericAbilities() const;
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Init")
