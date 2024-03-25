@@ -39,7 +39,7 @@ void UGameplayUI::NativeConstruct()
 		for (const FGameplayAbilitySpec* GrantedAbility : GrantedAbilities)
 		{
 			UAbilityGuage* NewAbilityGuage = CreateWidget<UAbilityGuage>(this, AbilityGuageClass);
-			UHorizontalBoxSlot* AbilitySlot = AbilityHBox->AddChildToHorizontalBox(NewAbilityGuage);
+			UHorizontalBoxSlot* AbilitySlot =  AbilityHBox->AddChildToHorizontalBox(NewAbilityGuage);
 			AbilitySlot->SetPadding(FMargin(5));
 		}
 	}

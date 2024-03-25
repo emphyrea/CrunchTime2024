@@ -16,15 +16,19 @@ class UAbilityGuage : public UUserWidget
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UImage* IconImage;
+	
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* CooldownDurationText;
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* ManaCostText;
+
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* CooldownCounterText;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Cooldown")
 	FName CooldownPercentMaterialParamName = "Percent";
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Icon")
 	FName IconTextureMaterialParamName = "Icon";
 };

@@ -20,7 +20,8 @@ public:
 private:
 	UPROPERTY(meta=(BindWidget))
 	class UStatusGuage* StatusGuage;
-	UPROPERTY(meta = (BindWidget))
+	
+	UPROPERTY(meta=(BindWidget))
 	class UHorizontalBox* AbilityHBox;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Ability")

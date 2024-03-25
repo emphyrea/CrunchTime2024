@@ -44,7 +44,6 @@ void UCAbilitySystemComponent::ApplyFullStat()
 TArray<const FGameplayAbilitySpec*> UCAbilitySystemComponent::GetGrantedNoneGenericAbilities() const
 {
 	TArray<const FGameplayAbilitySpec*> GrantedAbilitySpecs;
-
 	for (const TPair<EAbilityInputID, TSubclassOf<UGA_AbilityBase>>& AbilityPair : Abilities)
 	{
 		const FGameplayAbilitySpec* AbilitySpec = FindAbilitySpecFromClass(AbilityPair.Value);
@@ -52,5 +51,4 @@ TArray<const FGameplayAbilitySpec*> UCAbilitySystemComponent::GetGrantedNoneGene
 	}
 
 	return GrantedAbilitySpecs;
-
 }

@@ -8,7 +8,6 @@
 #include "CAbilitySystemComponent.generated.h"
 
 struct FGameplayAbilitySpec;
-
 /**
  * 
  */
