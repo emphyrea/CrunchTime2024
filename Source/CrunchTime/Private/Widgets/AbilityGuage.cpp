@@ -8,6 +8,9 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 
+#include "GameplayAbilities/CAttributeSet.h"
+#include "Widgets/GameplayUI.h"
+
 #include "GameplayAbilities/GA_AbilityBase.h"
 #include "GameplayAbilities/CAbilitySystemBlueprintLibrary.h"
 
@@ -34,7 +37,7 @@ void UAbilityGuage::SetupOwingAbilityCDO(const UGA_AbilityBase* OwningAbilityCDO
 
 		float ManaCost = UCAbilitySystemBlueprintLibrary::GetAbilityStaticManaCost(AbilityCDO);
 		ManaCostText->SetText(FText::AsNumber(ManaCost, &FormattingOptions));
-	
+
 		CooldownCounterText->SetVisibility(ESlateVisibility::Hidden);
 		SubscribeAbilityCommitedDelegate();
 	}
@@ -69,18 +72,28 @@ void UAbilityGuage::AbilityCommited(UGameplayAbility* Ability)
 		GetWorld()->GetTimerManager().SetTimer(CooldownTickTimerHandle, this, &UAbilityGuage::TickCooldown, CooldownTickInterval, true);
 		FTimerHandle CooldownFinishedHandle;
 		GetWorld()->GetTimerManager().SetTimer(CooldownFinishedHandle, this, &UAbilityGuage::CooldownFinished, CooldownTimeRemaining, false);
+		CooldownCounterText->SetVisibility(ESlateVisibility::Visible);
+
 	}
 }
 
 void UAbilityGuage::TickCooldown()
 {
+
 	CooldownTimeRemaining -= CooldownTickInterval;
 	float Percent = 1 - CooldownTimeRemaining / CooldownDuration;
 	IconMat->SetScalarParameterValue(CooldownPercentMaterialParamName, Percent);
+
+	FNumberFormattingOptions FormattingOptions;
+	FormattingOptions.MaximumFractionalDigits = CooldownTimeRemaining > 1 ? 0 : 1;
+	CooldownDurationText->SetText(FText::AsNumber(CooldownTimeRemaining, &FormattingOptions));
+
 }
 
 void UAbilityGuage::CooldownFinished()
 {
+
 	GetWorld()->GetTimerManager().ClearTimer(CooldownTickTimerHandle);
 	IconMat->SetScalarParameterValue(CooldownPercentMaterialParamName, 1.f);
+	CooldownCounterText->SetVisibility(ESlateVisibility::Hidden);
 }
