@@ -89,7 +89,7 @@ void UCGameInstance::FindSessionCompleted(bool bWasSuccessful)
 		{
 			FString SessionName = "";
 			SearchResult.Session.SessionSettings.Get(GetSessionNameKey(), SessionName);
-			UE_LOG(LogTemp, Warning, TEXT("Session: %s with id: % found"), SessionName, SearchResult.GetSessionIdStr());
+			UE_LOG(LogTemp, Warning, TEXT("Session: %s with id: %s found"), *SessionName, *SearchResult.GetSessionIdStr());
 		}
 	}
 }
