@@ -1,6 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Character/CCharacterBase.h"
 
 #include "AIController.h"
@@ -24,7 +22,6 @@
 
 #include "Targeting/TargetingBoxComponent.h"
 #include "Widgets/StatusGuage.h"
-
 
 // Sets default values
 ACCharacterBase::ACCharacterBase()
@@ -196,6 +193,7 @@ void ACCharacterBase::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 	if (HasAuthority())
 	{
 		if (ChangeData.NewValue >= AttributeSet->GetMaxHealth())
+
 		{
 			AbilitySystemComponent->AddLooseGameplayTag(UCAbilityGenericTags::GetFullHealthTag());
 		}

@@ -1,10 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Widgets/GameplayUI.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-
 #include "Components/HorizontalBox.h"
 #include "Components/HorizontalBoxSlot.h"
 
@@ -71,7 +69,6 @@ void UGameplayUI::ManaUpdated(const FOnAttributeChangeData& ChangeData)
 void UGameplayUI::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	StatusGuage->SetMana(GetAttributeValue(UCAttributeSet::GetManaAttribute()), ChangeData.NewValue);
-
 }
 
 float UGameplayUI::GetAttributeValue(const FGameplayAttribute& Attribute) const
