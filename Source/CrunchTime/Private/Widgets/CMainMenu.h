@@ -19,11 +19,16 @@ private:
 	class UButton* LoginBtn;
 
 	UPROPERTY(meta = (BindWidget))
+	class UEditableText* SessionNameText;
+
+	UPROPERTY(meta = (BindWidget))
 	class UButton* CreateSessionBtn;
 	
 	UPROPERTY(meta = (BindWidget))
 	class UButton* FindSessionBtn;
 
+	UFUNCTION()
+	void SessionNameTextChanged(const FText& NewText);
 	UFUNCTION()
 	void LoginBtnClicked();
 
@@ -32,6 +37,8 @@ private:
 
 	UFUNCTION()
 	void FindSessionBtnClicked();
+
+
 	
 	class UCGameInstance* CGameInst;
 };

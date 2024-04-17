@@ -87,8 +87,10 @@ void UCGameInstance::CreateSessionCompleted(FName SessionName, bool bWasSuccessf
 
 void UCGameInstance::FindSessionCompleted(bool bWasSuccessful)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Find Session complete"))
 	if (bWasSuccessful)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Find Session Success"))
 		for (const FOnlineSessionSearchResult& SearchResult : OnlineSessionSearch->SearchResults)
 		{
 			FString SessionName = "";
