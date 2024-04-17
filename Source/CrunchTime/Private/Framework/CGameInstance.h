@@ -9,6 +9,8 @@
 
 #include "CGameInstance.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnSessionSearchCompleted, const TArray<FOnlineSessionSearchResult>&)
+
 /**
  * 
  */
@@ -17,6 +19,7 @@ class UCGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 public:
+	FOnSessionSearchCompleted OnSessionSearchCompleted;
 	void Login();
 	void CreateSession(const FName& SessionName);
 	void FindSessions();
