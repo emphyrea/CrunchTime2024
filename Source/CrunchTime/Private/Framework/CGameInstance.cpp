@@ -49,6 +49,18 @@ void UCGameInstance::FindSessions()
 	SessionPtr->FindSessions(0, OnlineSessionSearch.ToSharedRef());
 }
 
+void UCGameInstance::JoinSessionWithSearchResultIndex(int SearchResultIndex)
+{
+	if (SearchResultIndex <= 0 || SearchResultIndex >= OnlineSessionSearch->SearchResults.Num())
+	{
+		return;
+	}
+	const FOnlineSessionSearchResult& SearchResult = OnlineSessionSearch->SearchResults[SearchResultIndex];
+	FString SessionNameStr;
+	SearchResult.Session.SessionSettings.Get(GetSessionNameKey(), SessionNameStr);
+	SessionPtr->JoinSession(0, FName{ SessionNameStr }, SearchResult);
+}
+
 void UCGameInstance::Init()
 {
 	Super::Init();
@@ -59,6 +71,16 @@ void UCGameInstance::Init()
 	SessionPtr = OnlineSubsystem->GetSessionInterface();
 	SessionPtr->OnCreateSessionCompleteDelegates.AddUObject(this, &UCGameInstance::CreateSessionCompleted);
 	SessionPtr->OnFindSessionsCompleteDelegates.AddUObject(this, &UCGameInstance::FindSessionCompleted);
+	SessionPtr->OnJoinSessionCompleteDelegates.AddUObject(this, &UCGameInstance::JoinSessionCompleted);
+}
+void UCGameInstance::JoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type CompleteResult)
+{
+	if (CompleteResult == EOnJoinSessionCompleteResult::Success)
+	{
+		FString ServerURL;
+		SessionPtr->GetResolvedConnectString(SessionName, ServerURL);
+		GetFirstLocalPlayerController()->ClientTravel(ServerURL, TRAVEL_Absolute);
+	}
 }
 
 void UCGameInstance::LoginCompleted(int PlayerNumber, bool bWasSuccessful, const FUniqueNetId& UserId, const FString& Error)
@@ -98,6 +120,7 @@ void UCGameInstance::FindSessionCompleted(bool bWasSuccessful)
 			SearchResult.Session.SessionSettings.Get(GetSessionNameKey(), SessionName);
 			UE_LOG(LogTemp, Warning, TEXT("Session: %s with id: %s found"), *SessionName, *SearchResult.GetSessionIdStr());
 		}
+		JoinSessionWithSearchResultIndex(0);
 	}
 }
 

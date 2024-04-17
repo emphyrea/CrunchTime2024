@@ -21,6 +21,7 @@ public:
 	void CreateSession(const FName& SessionName);
 	void FindSessions();
 	const FName& GetSessionNameKey() const { return SessionNameKey; }
+	void JoinSessionWithSearchResultIndex(int SearchResultIndex);
 
 protected:
 	virtual void Init() override;
@@ -32,6 +33,7 @@ private:
 	void LoginCompleted(int  PlayerNumber, bool bWasSuccessful, const FUniqueNetId& UserId, const FString&  Error);
 	void CreateSessionCompleted(FName SessionName, bool bWasSuccessful);
 	void FindSessionCompleted(bool bWasSuccessful);
+	void JoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type CompleteResult);
 	FName SessionNameKey{"SessionName"};
 
 	UPROPERTY(EditDefaultsOnly, Category = "Maps")
