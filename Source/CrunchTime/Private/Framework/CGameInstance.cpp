@@ -51,7 +51,7 @@ void UCGameInstance::FindSessions()
 
 void UCGameInstance::JoinSessionWithSearchResultIndex(int SearchResultIndex)
 {
-	if (SearchResultIndex <= 0 || SearchResultIndex >= OnlineSessionSearch->SearchResults.Num())
+	if (SearchResultIndex < 0 || SearchResultIndex >= OnlineSessionSearch->SearchResults.Num())
 	{
 		return;
 	}
