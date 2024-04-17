@@ -32,6 +32,7 @@ void UCGameInstance::CreateSession(const FName& SessionName)
 		SessionSettings.bAllowJoinInProgress = true;
 		SessionSettings.bAllowJoinViaPresence = true;
 		SessionSettings.bUseLobbiesIfAvailable = true;
+		SessionSettings.bUsesPresence = true;
 		SessionSettings.NumPublicConnections = 10;
 
 		SessionSettings.Set(GetSessionNameKey(), SessionName.ToString(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
@@ -39,9 +40,12 @@ void UCGameInstance::CreateSession(const FName& SessionName)
 	}
 }
 
-void UCGameInstance::FindSessioins()
+void UCGameInstance::FindSessions()
 {
 	OnlineSessionSearch = TSharedPtr<FOnlineSessionSearch>(new FOnlineSessionSearch);
+	OnlineSessionSearch->bIsLanQuery = false;
+	OnlineSessionSearch->MaxSearchResults = 10;
+	OnlineSessionSearch->QuerySettings.Set(SEARCH_LOBBIES, true, EOnlineComparisonOp::Equals);
 	SessionPtr->FindSessions(0, OnlineSessionSearch.ToSharedRef());
 }
 

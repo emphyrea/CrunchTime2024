@@ -19,7 +19,7 @@ class UCGameInstance : public UGameInstance
 public:
 	void Login();
 	void CreateSession(const FName& SessionName);
-	void FindSessioins();
+	void FindSessions();
 	const FName& GetSessionNameKey() const { return SessionNameKey; }
 
 protected:

@@ -34,6 +34,6 @@ void UCMainMenu::FindSessionBtnClicked()
 {
 	if (CGameInst)
 	{
-		CGameInst->FindSessioins();
+		CGameInst->FindSessions();
 	}
 }
