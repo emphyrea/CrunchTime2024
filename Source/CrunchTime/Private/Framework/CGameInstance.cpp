@@ -78,6 +78,7 @@ void UCGameInstance::CreateSessionCompleted(FName SessionName, bool bWasSuccessf
 	if (bWasSuccessful)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Session %s Created"), *SessionName.ToString());
+		LoadMapAndListen(GameLevel);
 	}
 	else
 	{
@@ -97,5 +98,19 @@ void UCGameInstance::FindSessionCompleted(bool bWasSuccessful)
 			SearchResult.Session.SessionSettings.Get(GetSessionNameKey(), SessionName);
 			UE_LOG(LogTemp, Warning, TEXT("Session: %s with id: %s found"), *SessionName, *SearchResult.GetSessionIdStr());
 		}
+	}
+}
+
+void UCGameInstance::LoadMapAndListen(TSoftObjectPtr<UWorld> MapToLoad)
+{
+	if (!MapToLoad.IsValid())
+	{
+		MapToLoad.LoadSynchronous();
+	}
+
+	if (MapToLoad.IsValid())
+	{
+		const FName LevelURL = FName(*FPackageName::ObjectPathToPackageName(MapToLoad.ToString()));
+		GetWorld()->ServerTravel(LevelURL.ToString() + "?listen");
 	}
 }

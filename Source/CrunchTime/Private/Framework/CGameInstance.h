@@ -34,5 +34,10 @@ private:
 	void FindSessionCompleted(bool bWasSuccessful);
 	FName SessionNameKey{"SessionName"};
 
+	UPROPERTY(EditDefaultsOnly, Category = "Maps")
+	TSoftObjectPtr<UWorld> GameLevel;
+
+	void LoadMapAndListen(TSoftObjectPtr<UWorld> MapToLoad);
+
 	TSharedPtr<FOnlineSessionSearch> OnlineSessionSearch;
 };
