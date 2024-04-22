@@ -1,5 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -23,6 +22,18 @@ private:
 	
 	UPROPERTY(meta=(BindWidget))
 	class UHorizontalBox* AbilityHBox;
+	
+	UPROPERTY(meta=(BindWidget))
+	class UAttributeGuage* StrengthGuage;
+
+	UPROPERTY(meta=(BindWidget))
+	class UAttributeGuage* IntellegenceGuage;
+
+	UPROPERTY(meta=(BindWidget))
+	class UAttributeGuage* AttackDamageGuage;
+
+	UPROPERTY(meta=(BindWidget))
+	class UAttributeGuage* ArmorGuage;
 
 	class UGameplayUI* GameplayUI;
 
@@ -35,11 +46,8 @@ private:
 	void ManaUpdated(const FOnAttributeChangeData& ChangeData);
 	void MaxManaUpdated(const FOnAttributeChangeData& ChangeData);
 
-
 	float GetAttributeValue(const FGameplayAttribute& Attribute) const;
 
 	UPROPERTY()
 	const class UAbilitySystemComponent* OwnerAbilitySystemComponent;
 };
-
-

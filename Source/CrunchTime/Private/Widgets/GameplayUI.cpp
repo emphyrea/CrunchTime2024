@@ -1,10 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #include "Widgets/GameplayUI.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
-
 #include "Components/HorizontalBox.h"
 #include "Components/HorizontalBoxSlot.h"
 
@@ -15,6 +13,7 @@
 
 #include "Widgets/AbilityGuage.h"
 #include "Widgets/StatusGuage.h"
+#include "Widgets/AttributeGuage.h"
 
 void UGameplayUI::NativeConstruct()
 {
@@ -27,6 +26,11 @@ void UGameplayUI::NativeConstruct()
 		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxHealthAttribute()).AddUObject(this, &UGameplayUI::MaxHealthUpdated);
 		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetManaAttribute()).AddUObject(this, &UGameplayUI::ManaUpdated);
 		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMaxManaAttribute()).AddUObject(this, &UGameplayUI::MaxManaUpdated);
+
+		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetStrengthAttribute()).AddUObject(StrengthGuage, &UAttributeGuage::UpdateValue);
+		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetIntellegenceAttribute()).AddUObject(IntellegenceGuage, &UAttributeGuage::UpdateValue);
+		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetAttackDamageAttribute()).AddUObject(AttackDamageGuage, &UAttributeGuage::UpdateValue);
+		OwnerASC->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetArmorAttribute()).AddUObject(ArmorGuage, &UAttributeGuage::UpdateValue);
 	}
 
 	OwnerAbilitySystemComponent = OwnerASC;
@@ -65,7 +69,6 @@ void UGameplayUI::ManaUpdated(const FOnAttributeChangeData& ChangeData)
 void UGameplayUI::MaxManaUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	StatusGuage->SetMana(GetAttributeValue(UCAttributeSet::GetManaAttribute()), ChangeData.NewValue);
-
 }
 
 float UGameplayUI::GetAttributeValue(const FGameplayAttribute& Attribute) const
